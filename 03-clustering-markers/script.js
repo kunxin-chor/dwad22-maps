@@ -25,6 +25,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 function getRandomLatLng(map) {
     // get the boundaries of the map
     let bounds = map.getBounds();
+    console.log(bounds);
     let southWest = bounds.getSouthWest();
     let northEast = bounds.getNorthEast();
 
