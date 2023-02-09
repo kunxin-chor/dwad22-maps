@@ -41,7 +41,40 @@ const hdbURL = "https://gist.githubusercontent.com/kunxin-chor/a5f5cab3e8a6ad086
 const mallURL = "https://gist.githubusercontent.com/kunxin-chor/a5f5cab3e8a6ad0868134334c1432d9a/raw/57f353d0aaa51805cd9bbe6bdcb12cb86e6068da/malls.json";
 const natureURL = "https://gist.githubusercontent.com/kunxin-chor/a5f5cab3e8a6ad0868134334c1432d9a/raw/57f353d0aaa51805cd9bbe6bdcb12cb86e6068da/nature.json";
 
+function foobar() {
+
+    return 123;
+}
+
+let a = foobar();
+
 async function main() {
+   
+    // call the functions without await
+    // when we call any aysnc functions without using await, it returns a promise
+    // a promise is an IOU for the return value of that function
+    // we can await that promise
+    let hdbPromise = loadHDB();
+    let mallPromise = loadMalls();
+    let naturePromise = loadNature();
+
+    let hdbLayer = await hdbPromise;
+    let mallLayer = await mallPromise;
+    let natureLayer = await naturePromise;
+
+    // create the base layers and the overlay
+    let overlays = {
+        'HDB': hdbLayer,
+        'Malls': mallLayer,
+        'Nature': natureLayer
+    }
+
+    // we don't want a base layer so can pass in an empty object
+    // likewise if we don't want overlays then we can pass in an empty object for the second parameter
+    L.control.layers({}, overlays).addTo(map);
+
+}
+async function loadHDB() {
     let hdbResponse = await axios.get(hdbURL);
 
     // create the layer group to store all the HDB
@@ -53,7 +86,10 @@ async function main() {
         marker.addTo(hdbLayer);
     }
     hdbLayer.addTo(map); // add layer group to map
+    return hdbLayer;
+}
 
+async function loadMalls(){
     let mallResponse = await axios.get(mallURL);
 
     let mallLayer = L.layerGroup();
@@ -68,7 +104,10 @@ async function main() {
         circle.addTo(mallLayer);
     }
     mallLayer.addTo(map);
+    return mallLayer;
+}
 
+async function loadNature() {
     let natureLayer = L.layerGroup();
     let natureResponse = await axios.get(natureURL);
     for (let nature of natureResponse.data) {
@@ -82,17 +121,8 @@ async function main() {
         circle.addTo(natureLayer);
     }
     natureLayer.addTo(map);
+    return natureLayer;
     
-    // create the base layers and the overlay
-    let overlays = {
-        'HDB': hdbLayer,
-        'Malls': mallLayer,
-        'Nature': natureLayer
-    }
-
-    // we don't want a base layer so can pass in an empty object
-    // likewise if we don't want overlays then we can pass in an empty object for the second parameter
-    L.control.layers({}, overlays).addTo(map);
-
 }
+
 main();
