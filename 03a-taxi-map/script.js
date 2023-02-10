@@ -16,19 +16,28 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
+ // create the marker cluster first
+// globalize the marker cluster group
+let markerCluster = L.markerClusterGroup();
+markerCluster.addTo(map);
 
 async function getTaxi() {
+    console.log("getting taxi");
    let response =  await axios.get("https://api.data.gov.sg/v1/transport/taxi-availability");
    let taxiMarkers = response.data.features[0].geometry.coordinates 
-   console.log(taxiMarkers);
+   
+   markerCluster.clearLayers();
 
    for (let m of taxiMarkers) {
     let lat = m[1];  // for this API, their coordinates are in [lng, lat]
     let lng = m[0];
     let newCoordinate = [lat, lng];
     let taxi = L.marker(newCoordinate);
-    taxi.addTo(map);
+    taxi.addTo(markerCluster);
    }
-
 }
 getTaxi();
+
+setInterval(function(){
+    getTaxi();
+}, 1000 * 60)
