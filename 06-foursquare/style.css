@@ -13,6 +13,12 @@
     z-index: 1000;
     background-color: rgba(255,255,255, 0.5);
     padding: 10px;
+    display:none;
+    max-width: 200px;
+}
+
+#search-container option {
+    max-width: 200px;
 }
 
 #search-results {
@@ -22,4 +28,22 @@
 
 .search-item {
     margin: 5px;
+
+}
+
+#toggle-search-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 314159;
+}
+
+@media screen and (min-width:768px) {
+    #search-container {
+        display: block;
+    }
+
+    #toggle-search-btn {
+        display: none;
+    }
 }

@@ -49,10 +49,19 @@ function main() {
                 map.flyTo(coordinate, 16);
                 marker.openPopup();
             })
-
-
         }
     });
+
+    document.querySelector("#toggle-search-btn").addEventListener('click', async function(){
+        const searchContainer = document.querySelector("#search-container");
+        let currentDisplay = searchContainer.style.display;
+
+        if (currentDisplay=='' || currentDisplay=="none") {
+            searchContainer.style.display = 'block';
+        } else {
+            searchContainer.style.display = 'none';
+        }
+    })
 }
 
 // DOMContentLoaded event waits for all the HTML elements
