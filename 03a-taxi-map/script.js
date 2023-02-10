@@ -8,10 +8,27 @@
 // 6. PROFIT
 
 // to display the map: we need a center point
-let map = L.map('map').setView([ 1.2879, 103.8517], 8);
+let map = L.map('map').setView([ 1.2879, 103.8517], 13);
 
 // setup the tile layer
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
+
+
+async function getTaxi() {
+   let response =  await axios.get("https://api.data.gov.sg/v1/transport/taxi-availability");
+   let taxiMarkers = response.data.features[0].geometry.coordinates 
+   console.log(taxiMarkers);
+
+   for (let m of taxiMarkers) {
+    let lat = m[1];  // for this API, their coordinates are in [lng, lat]
+    let lng = m[0];
+    let newCoordinate = [lat, lng];
+    let taxi = L.marker(newCoordinate);
+    taxi.addTo(map);
+   }
+
+}
+getTaxi();
