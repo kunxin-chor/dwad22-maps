@@ -78,6 +78,7 @@ circle.bindPopup(function(){
     // EXAMPLE 1:
     // button.addEventListener("click", function(){
     //     alert ("hi ma!");
+    // HINT: You can still update the popup element here, good if you are using axios
     // });
 
     // EXAMPLE 2
